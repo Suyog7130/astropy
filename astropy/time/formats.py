@@ -517,6 +517,28 @@ class TimeMJD(TimeNumeric):
     value = property(to_value)
 
 
+class TimeRJD(TimeNumeric):
+    """
+    Reduced Julian Date time format.
+    This represents the number of days since noon on November 16, 1858.
+    For example, 51544.5 in RJD is midnight on January 1, 2000.
+    """
+    name = 'rjd'
+
+    def set_jds(self, val1, val2):
+        self._check_scale(self._scale)  # Validate scale.
+        jd1, jd2 = day_frac(val1, val2)
+        jd1 += 2400000.0
+        self.jd1, self.jd2 = day_frac(jd1, jd2)
+
+    def to_value(self, **kwargs):
+        jd1 = self.jd1 - 2400000.0  # This cannot lose precision.
+        jd2 = self.jd2
+        return super().to_value(jd1=jd1, jd2=jd2, **kwargs)
+
+    value = property(to_value)
+
+
 class TimeDecimalYear(TimeNumeric):
     """
     Time as a decimal year, with integer values corresponding to midnight

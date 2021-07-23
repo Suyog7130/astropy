@@ -348,7 +348,11 @@ def test_write_coord_cols():
         i_secs = [i for i, s in enumerate(lines)
                   if s.startswith(('------', '======='))]
         lines = lines[i_secs[-6]:]  # Select Byte-By-Byte section and later lines.
+        # Check the written table.
         assert lines == exp_output.splitlines()
+
+        # Check if the original table columns remains unmodified.
+        assert t.colnames == ['names', 'e', 'd', 's', 'i', 'sameF', 'sameI', 'coord']
 
 
 def test_write_byte_by_byte_bytes_col_format():

@@ -816,6 +816,9 @@ class Cds(core.BaseReader):
         self.data.header = self.header
         self.header.position_line = None
         self.header.start_line = None
+        # Create a copy of the ``table``, so that it the copy gets modified and
+        # written to the file, while the original table remains as it is.
+        table = table.copy()
         return super().write(table)
 
     def read(self, table):

@@ -87,7 +87,6 @@ Byte-by-byte Description of file: table.dat
 16-23  F8.5   ---    d       [22.25/27.25] Description of d    
 25-31  E7.1   ---    s       [-9e+34/2.0] Description of s     
 33-35  I3     ---    i       [-30/67] Description of i         
-
 --------------------------------------------------------------------------------
 
 See also:
@@ -151,7 +150,6 @@ Byte-by-byte Description of file: table.dat
 28-30  I3     ---    i       [-30/67] Description of i     
 32-34  F3.1   ---    sameF   [5.0/5.0] Description of sameF
 36-37  I2     ---    sameI   [20] Description of sameI     
-
 --------------------------------------------------------------------------------
 
 See also:
@@ -201,7 +199,6 @@ Byte-by-byte Description of file: table.dat
  74- 77  F5.1   deg    DEd     Declination (degree)              
  79- 82  F4.1   arcmin DEm     Declination (arcmin)              
  84-101  F18.15 arcsec DEs     Declination (arcsec)              
-
 --------------------------------------------------------------------------------
 
 See also:
@@ -236,7 +233,6 @@ Byte-by-byte Description of file: table.dat
  72- 75  F4.1   deg    DEd     Declination (degree)              
  77- 80  F4.1   arcmin DEm     Declination (arcmin)              
  82- 99  F18.15 arcsec DEs     Declination (arcsec)              
-
 --------------------------------------------------------------------------------
 
 See also:
@@ -267,7 +263,6 @@ Byte-by-byte Description of file: table.dat
 41-42  I2     ---    sameI   [20] Description of sameI         
 44-60  F17.13 deg    GLON    Galactic Longitude                
 62-79  F18.14 deg    GLAT    Galactic Latitude                 
-
 --------------------------------------------------------------------------------
 
 See also:
@@ -298,7 +293,6 @@ Byte-by-byte Description of file: table.dat
 41-42  I2     ---    sameI   [20] Description of sameI                  
 44-60  F17.13 deg    ELON    Ecliptic Longitude (geocentrictrueecliptic)
 62-79  F18.14 deg    ELAT    Ecliptic Latitude (geocentrictrueecliptic) 
-
 --------------------------------------------------------------------------------
 
 See also:
@@ -384,7 +378,6 @@ Byte-by-byte Description of file: table.dat
  75- 78  F5.1   deg    DEd           Declination (degree)              
  80- 83  F4.1   arcmin DEm           Declination (arcmin)              
  85-100  F16.13 arcsec DEs           Declination (arcsec)              
-
 --------------------------------------------------------------------------------
 ''' # noqa: W291
     from astropy.coordinates import SkyCoord
@@ -424,7 +417,6 @@ Byte-by-byte Description of file: table.dat
                                            extra details in the notes.
 10-14  E5.1   ---    e                      [-3160000.0/0.01] Description of e
 16-23  F8.5   ---    d                      [22.25/27.25] Description of d
-
 --------------------------------------------------------------------------------
 ''' # noqa: W291
     t = ascii.read(test_dat)

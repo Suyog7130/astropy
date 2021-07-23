@@ -597,6 +597,9 @@ class CdsHeader(core.BaseHeader):
             for line in notes:
                 buff += line + "\n"
             buff += "-" * MAX_SIZE_README_LINE + "\n"
+
+        # Remove the last extra newline character from Byte-By-Byte.
+        buff = buff[:-1]
         return buff
 
     def write(self, lines):

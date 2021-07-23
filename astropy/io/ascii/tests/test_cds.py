@@ -195,12 +195,12 @@ Byte-by-byte Description of file: table.dat
  37- 39  F3.1   ---    sameF   [5.0/5.0] Description of sameF    
  41- 42  I2     ---    sameI   [20] Description of sameI         
  44- 47  F4.1   h      RAh     Right Ascension (hour)            
- 49- 51  F3.1   min    RAm     Right Ascension (minute)          
- 53- 70  F18.15 s      RAs     Right Ascension (second)          
-     72  A1     ---    DE-     Sign of Declination               
- 73- 76  F5.1   deg    DEd     Declination (degree)              
- 78- 81  F4.1   arcmin DEm     Declination (arcmin)              
- 83- 98  F16.13 arcsec DEs     Declination (arcsec)              
+ 49- 52  F4.1   min    RAm     Right Ascension (minute)          
+ 54- 71  F18.15 s      RAs     Right Ascension (second)          
+     73  A1     ---    DE-     Sign of Declination               
+ 74- 77  F5.1   deg    DEd     Declination (degree)              
+ 79- 82  F4.1   arcmin DEm     Declination (arcmin)              
+ 84-101  F18.15 arcsec DEs     Declination (arcsec)              
 
 --------------------------------------------------------------------------------
 
@@ -213,8 +213,8 @@ References:
 ================================================================================
      (prepared by 1st author ?  / astropy.io.ascii )
 --------------------------------------------------------------------------------
-HD81809  1e-07  22.25608   2e+00  67 5.0 20 22.0 2.0 15.450000000007265 -61.0 39.0 34.5999960000006
-HD103095 -3e+06 27.25000  -9e+34 -30 5.0 20 22.0 2.0 15.450000000007265 -61.0 39.0 34.5999960000006
+HD81809  1e-07  22.25608   2e+00  67 5.0 20 22.0  2.0 15.450000000007265 -61.0 39.0 34.599996000000601
+HD103095 -3e+06 27.25000  -9e+34 -30 5.0 20 12.0 48.0 15.224407200004890  17.0 46.0 26.496624000004374
 ''',  # noqa: W291
 
 positive_de = '''\
@@ -333,7 +333,7 @@ def test_write_coord_cols():
     coord = SkyCoord(330.564375, -61.65961111, unit=u.deg)
     # Coordinates of ASASSN-14li
     coordp = SkyCoord(192.06343503, 17.77402684, unit=u.deg)
-    cols = [Column([coord]), # Generic coordinate column
+    cols = [Column([coord, coordp]), # Generic coordinate column
             coordp,          # Coordinate column with positive DEC
             coord.galactic,  # Galactic coordinates
             coord.geocentrictrueecliptic  # Ecliptic coordinates

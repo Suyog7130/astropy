@@ -368,14 +368,22 @@ class CdsHeader(core.BaseHeader):
 
         --------------------------------------------------------------------------------
         """
-        # For columns that are instances of ``SkyCoord`` and ``TimeSeries`` classes,
+        # For columns that are instances of ``SkyCoord``,
         # or whose values are objects of these classes.
         for i, col in enumerate(self.cols):
             # If col is a ``Column`` object but its values are ``SkyCoord`` objects,
             # convert the whole column to ``SkyCoord`` object, which helps in applying
             # SkyCoord methods directly.
             if not isinstance(col, SkyCoord) and isinstance(col[0], SkyCoord):
-                col = SkyCoord(col)
+                try:
+                    col = SkyCoord(col)
+                except (ValueError, AttributeError):
+                    # If only the first value of the column is a ``SkyCoord`` object,
+                    # the column cannot be converted to a ``SkyCoord`` object.
+                    # These columns are converted to ``Column`` object and then skipped
+                    # from further editing. However, they may still result in failure.
+                    self.cols[i] = Column(col)
+                    continue
 
             # Replace single ``SkyCoord`` column by its coordinate components.
             if isinstance(col, SkyCoord):
@@ -413,16 +421,23 @@ class CdsHeader(core.BaseHeader):
                         lat_col = Column(col.b, name='GLAT',
                                          description='Galactic Latitude',
                                          unit=col.representation_component_units['b'])
+                        self.cols.append(lon_col)
+                        self.cols.append(lat_col)
+
                     # Ecliptic coordinates, can be any of various available.
-                    else:
+                    elif 'ecliptic' in col.name:
                         lon_col = Column(col.lon, name='ELON',
                                          description = 'Ecliptic Longitude (' + col.name + ')',
                                          unit=col.representation_component_units['lon'])
                         lat_col = Column(col.lat, name='ELAT',
                                          description = 'Ecliptic Latitude (' + col.name + ')',
                                          unit=col.representation_component_units['lat'])
-                    self.cols.append(lon_col)
-                    self.cols.append(lat_col)
+                        self.cols.append(lon_col)
+                        self.cols.append(lat_col)
+
+                    # Convert all other columns to string valued column.
+                    else:
+                        self.cols.append( Column(col.to_string()) )
 
                 self.cols.pop(i)  # Delete original ``SkyCoord`` column.
 

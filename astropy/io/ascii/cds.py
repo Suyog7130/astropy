@@ -368,7 +368,7 @@ class CdsHeader(core.BaseHeader):
 
         --------------------------------------------------------------------------------
         """
-        # For columns that are instances of ``SkyCoord``,
+        # For columns that are instances of ``SkyCoord`` and other ``mixin`` columns
         # or whose values are objects of these classes.
         for i, col in enumerate(self.cols):
             # If col is a ``Column`` object but its values are ``SkyCoord`` objects,
@@ -377,12 +377,15 @@ class CdsHeader(core.BaseHeader):
             if not isinstance(col, SkyCoord) and isinstance(col[0], SkyCoord):
                 try:
                     col = SkyCoord(col)
-                except (ValueError, AttributeError):
+                except (ValueError, TypeError):
                     # If only the first value of the column is a ``SkyCoord`` object,
                     # the column cannot be converted to a ``SkyCoord`` object.
-                    # These columns are converted to ``Column`` object and then skipped
-                    # from further editing. However, they may still result in failure.
-                    self.cols[i] = Column(col)
+                    # These columns are converted to ``Column`` object and then converted
+                    # to string valued column.
+                    if not (isinstance(col, Column) or isinstance(col, MaskedColumn)):
+                        col = Column(col)
+                    col = Column([str(val) for val in col])
+                    self.cols[i] = col
                     continue
 
             # Replace single ``SkyCoord`` column by its coordinate components.
@@ -441,6 +444,15 @@ class CdsHeader(core.BaseHeader):
 
                 self.cols.pop(i)  # Delete original ``SkyCoord`` column.
 
+            # Convert all other ``mixin`` columns to ``Column`` objects.
+            # Parsing these may still lead to errors!
+            elif not (isinstance(col, Column) or isinstance(col, MaskedColumn)):
+                col = Column(col)
+                # If column values are ``object`` types, convert them to string.
+                if np.issubdtype(col.dtype, np.object):
+                    col = Column([str(val) for val in col])
+                self.cols[i] = col
+
         # Get column widths
         vals_list = []
         col_str_iters = self.data.str_vals()
@@ -494,8 +506,8 @@ class CdsHeader(core.BaseHeader):
                 self._set_column_val_limits(col)
                 self.column_float_formatter(col)
 
-            elif np.issubdtype(col.dtype, np.str):
-                # String formatter
+            else:
+                # String formatter, ``np.issubdtype(col.dtype, np.str)`` is ``True``.
                 if col.has_null:
                     mcol = col
                     mcol.fill_value = ""
@@ -508,7 +520,14 @@ class CdsHeader(core.BaseHeader):
 
             endb = col.meta.size + startb - 1
 
-            # Set column description
+            # ``mixin`` columns converted to string valued columns will not have a name
+            # attribute. In those cases, a ``Unknown`` column label is put, indicating that
+            # such columns can be better formatted with some manipulation before calling
+            # the CDS/MRT writer.
+            if col.name is None:
+                col.name = "Unknown"
+
+            # Set column description.
             if col.description is not None:
                 description = col.description
             else:

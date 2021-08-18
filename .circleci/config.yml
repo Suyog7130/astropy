@@ -6,7 +6,7 @@ jobs:
 
   image-tests-mpl302:
     docker:
-      - image: astropy/image-tests-py37-mpl302:1.10
+      - image: astropy/image-tests-py38-mpl302:1.10
     steps:
       - checkout
       - run:
@@ -21,9 +21,9 @@ jobs:
       - store_artifacts:
           path: results
 
-  image-tests-mpl310:
+  image-tests-mpl31:
     docker:
-      - image: astropy/image-tests-py37-mpl311:1.10
+      - image: astropy/image-tests-py38-mpl311:1.10
     steps:
       - checkout
       - run:
@@ -37,7 +37,7 @@ jobs:
 
   image-tests-mpldev:
     docker:
-      - image: astropy/image-tests-py37-base:1.4
+      - image: astropy/image-tests-py38-base:1.4
     steps:
       - checkout
       - run:
@@ -45,7 +45,7 @@ jobs:
           command: pip3 install tox
       - run:
           name: Run tests
-          command: tox -e py37-test-image-mpldev -- -P visualization --remote-data=astropy --open-files --mpl-results-path=$PWD/results -W ignore:np.asscalar
+          command: tox -e py38-test-image-mpldev -- -P visualization --remote-data=astropy --open-files --mpl-results-path=$PWD/results -W ignore:np.asscalar
       - store_artifacts:
           path: results
 
@@ -54,5 +54,5 @@ workflows:
   tests:
     jobs:
       - image-tests-mpl302
-#      - image-tests-mpl310
+      - image-tests-mpl31
       - image-tests-mpldev

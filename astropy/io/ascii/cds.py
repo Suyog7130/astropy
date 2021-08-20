@@ -384,7 +384,7 @@ class CdsHeader(core.BaseHeader):
         # Set default width of the Bytes count column of the Byte-By-Byte table.
         # This ``byte_count_width`` value helps align byte counts with respect
         # to the hyphen using a format string.
-        byte_count_width = len(str( sum(widths) + len(self.cols) - 1 ))
+        byte_count_width = len(str(sum(widths) + len(self.cols) - 1))
 
         # Format string for Start Byte and End Byte
         singlebfmt = "{:" + str(byte_count_width) + "d}"
@@ -417,7 +417,7 @@ class CdsHeader(core.BaseHeader):
                 # Integer formatter
                 self._set_column_val_limits(col)
                 if getattr(col.meta, 'size', None) is None:  # If ``formats`` not passed.
-                    col.meta.size = max( len(str(col.max)), len(str(col.min)) )
+                    col.meta.size = max(len(str(col.max)), len(str(col.min)))
                 col.fortran_format = "I" + str(col.meta.size)
                 col.format = ">" + col.fortran_format[1:]
 
@@ -640,7 +640,7 @@ class CdsHeader(core.BaseHeader):
                     # Convert all other ``SkyCoord`` columns that are not in the above three
                     # representations to string valued columns.
                     else:
-                        self.cols.append( Column(col.to_string()) )
+                        self.cols.append(Column(col.to_string()))
 
                 #self.cols.pop(i)  # Delete original ``SkyCoord`` column.
                 to_pop.append(i)
@@ -669,7 +669,7 @@ class CdsHeader(core.BaseHeader):
             # together with issuance of a warning.
             for i, col in enumerate(self.cols):
                 if isinstance(col, SkyCoord):
-                    self.cols[i] = Column( col.to_string() )
+                    self.cols[i] = Column(col.to_string())
                     message = 'Table already has coordinate system in CDS/MRT-syle columns.' \
                               + f' So column {i} is being skipped with designation' \
                               + ' of an `Unknown` string valued column.'

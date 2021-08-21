@@ -413,7 +413,7 @@ class CdsHeader(core.BaseHeader):
                 col.meta.size = max([len(sval) for sval in col.str_vals])
 
             # Set CDSColumn type, size and format.
-            if np.issubdtype(col.dtype, int) or np.issubdtype(col.dtype, np.integer):
+            if np.issubdtype(col.dtype, np.dtype(int).type) or np.issubdtype(col.dtype, np.integer):
                 # Integer formatter
                 self._set_column_val_limits(col)
                 if getattr(col.meta, 'size', None) is None:  # If ``formats`` not passed.
@@ -421,7 +421,7 @@ class CdsHeader(core.BaseHeader):
                 col.fortran_format = "I" + str(col.meta.size)
                 col.format = ">" + col.fortran_format[1:]
 
-            elif np.issubdtype(col.dtype, float):
+            elif np.issubdtype(col.dtype, np.dtype(float).type):
                 # Float formatter
                 self._set_column_val_limits(col)
                 self.column_float_formatter(col)
@@ -650,7 +650,7 @@ class CdsHeader(core.BaseHeader):
             elif not isinstance(col, Column):
                 col = Column(col)
                 # If column values are ``object`` types, convert them to string.
-                if np.issubdtype(col.dtype, object):
+                if np.issubdtype(col.dtype, np.dtype(object).type):
                     col = Column([str(val) for val in col])
                 self.cols[i] = col
 
